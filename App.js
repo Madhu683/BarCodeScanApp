@@ -1,36 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View,StyleSheet,Text,TextInput,Button} from 'react-native';
-function Input({title,placeholder,secureTextEntry})
-  {
-      return(
-          <View style={{height:82,width:'100%',backgroundColor:'white',marginBottom:16}}>
-              <Text style={{
-                            fontStyle:'normal',
-                            fontWeight:'normal',
-                            fontSize:15,
-                            lineHeight:25,
-                            letterSpacing:0.2,
-                            marginBottom:6}}>{title}</Text>
-              <TextInput style={{width:'100%',
-                                 height:49,
-                                 backgroundColor:'rgba(241,245,249,0.4)',
-                                 borderWidth:1,
-                                 borderColor:'#CBD5E1',
-                                 borderRadius:10,
-                                  padding:15,
-                                 
-                                 fontStyle:'normal',
-                                  fontWeight:'normal',
-                                 fontSize:15,
-                                  lineHeight:24,
-                                 letterSpacing:0.2}} 
-                                 placeholder={placeholder}
-                                 
-                                 secureTextEntry={secureTextEntry}></TextInput>
-          </View>
-      )
-  }  
+import axios from 'axios';
+
 function App() {
+    const productId='9573673706';
+    const [price,setPrice] = useState('');
+    const [note,setNote] = useState('');
+    const submit=async()=>{
+        const response = await axios.post(`https://sheet.best/api/sheets/aed70fb4-10e4-4ec5-acca-7e22ae10ddf6`, {
+            productId,
+            price,
+            note
+          });
+    };
   return (
     <View style={styles.container}>
         <View style={styles.productBox}>
@@ -38,12 +20,15 @@ function App() {
             <Text style={styles.productIdTitle}>9573673706</Text>
         </View>
         <View style={styles.formBox}> 
-        <Input title={'Price'} placeholder={'900'}/>
-        <Input title={'Note'} placeholder={'remarks'}/>
+        <TextInput placeholder='Price' value={price} onChangeText={text=>setPrice(text)} style={styles.input}/>
+        <TextInput placeholder='Note' value={note} onChangeText={text=>setNote(text)} style={styles.input}/>
+
         </View>
+        <Text>{price}</Text>
+        <Text>{note}</Text>
         <View style={styles.ButtonBox}>
             <Button title='Scan again'/>
-            <Button title='Confirm' />
+            <Button title='Confirm' onPress={submit} />
         </View>
        
     </View>
@@ -85,10 +70,15 @@ const styles=StyleSheet.create(
             width:'90%',
             marginHorizontal:'5%',
             marginVertical:'10%',
-            flexDirection:'row',
-        
-
-            
+            flexDirection:'row',     
+        },
+        input:
+        {
+           backgroundColor:'white',
+           paddingHorizontal:15,
+           paddingVertical:10,
+           borderRadius:10,
+           marginTop:5,
         }
 
     }
